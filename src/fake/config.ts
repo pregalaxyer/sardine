@@ -16,3 +16,8 @@ export const typeMapChanceConfig: Record<string, any> = {
  *  example: chance.pickset(array,3)
  */
 export const DEFAULT_ARRAY_COUNT: number = 3
+
+/**
+ *
+ */
+export const FAKE_OPTIONAL_TRIGGER: boolean = true

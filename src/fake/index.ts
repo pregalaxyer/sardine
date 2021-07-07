@@ -1,6 +1,6 @@
 const Chance = require('chance')
 import { Definition, Items } from '../swagger'
-import { typeMapChanceConfig, DEFAULT_ARRAY_COUNT } from './config'
+import { typeMapChanceConfig, DEFAULT_ARRAY_COUNT, FAKE_OPTIONAL_TRIGGER } from './config'
 
 const chanceInstance = new Chance()
 export { chanceInstance }
@@ -27,6 +27,12 @@ export function fakeObjectDefinition(
   const mock: Record<string, any> = {}
   const properties = definition.properties
   Object.entries(properties).forEach(([key, value]) => {
+    /**
+     * @description fake optional key, do nothing when key is not required
+     */
+    if (FAKE_OPTIONAL_TRIGGER && !definition.required?.includes(key) && fakeBoolean()) {
+      return
+    }
     if (Array.isArray(value.enum)) {
       mock[key] = fakeEnums(value.enum) as string
       return
