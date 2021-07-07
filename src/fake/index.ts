@@ -146,6 +146,7 @@ export function fakeString(item: Items): string {
   if (Array.isArray(item.enum)) {
     return fakeEnums(item.enum) as string
   }
+  if (item.default) return item.default
   const format: string = item.format || item.type
   const formatter = getFormatterFunction(format)
   return formatter(fakeStringLength(item.minLength, item.maxLength))
@@ -155,11 +156,13 @@ export function fakeNumber(item: Items): number {
   if (Array.isArray(item.enum)) {
     return fakeEnums(item.enum) as number
   }
+  if (item.default) return item.default
   const format: string = item.format || item.type
   const formatter: Function = getFormatterFunction(format)
   return formatter(fakeNumberAmongValue(item.minimum, item.maximum))
 }
 
-export function fakeBoolean(): boolean {
+export function fakeBoolean(item?: Items): boolean {
+  if (item?.default) return item.default
   return chanceInstance.bool()
 }

@@ -1,6 +1,6 @@
 ## Sardine
 
-`Sardine` is a mock serve tool via swagger data & chance. You can set swagger `format` property with chance method name to fake different types data~
+`Sardine` is a fake serve tool via `swagger`, `chance`, `nock`. You can set swagger `format` property with chance method name to fake different types data~
 
 
 ### Swagger Schemes
