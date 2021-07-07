@@ -10,10 +10,8 @@ export async function getSwaggerJsonFromUrl(url: string): Promise<Swagger | void
   }
 }
 /**
- * getServerName
- * @param swagger
- * @returns title => used for
- *  the mock server for ${title} application is runing at http://locahost:9999
+ * title => used for
+ * the mock server for ${title} application is runing at http://locahost:9999
  */
 export function getServerName(swagger: Swagger): string {
   return swagger.info.title as string
@@ -21,6 +19,9 @@ export function getServerName(swagger: Swagger): string {
 
 export const objectTag: string = '[object Object]'
 export const toString: Function = (val: any) => Object.prototype.toString.call(val)
+/**
+ * @description value is object only, exclude Date, Reg, Array, Null
+ */
 export function isObject(value?: any): value is object {
   return toString(value) === objectTag
 }

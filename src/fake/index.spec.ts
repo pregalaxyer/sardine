@@ -28,7 +28,7 @@ const definition: Definition = {
 }
 
 const definitions: Record<string, Definition> = {
-  pet: {
+  Pet: {
     type: 'object',
     properties: {
       type: { type: 'string', enum: ['cat', 'dog', 'pig'] },
@@ -53,8 +53,13 @@ const stringItem: Items = {
   minLength: 1
 }
 const stringEnums: string[] = ['music', 'film', 'song']
+
+// @ts-ignore
+const refItem: Items = {
+  $ref: '#/definitions/Pet'
+}
 //@ts-ignore
-const arrayItem: Items = { type: 'array', items: { type: 'string' } }
+const arrayItem: Items = { type: 'array', items: { type: 'string' }, minItems: 1, maxItems: 4 }
 
 describe('mock data tests', () => {
   test('chanceInstance should be defined', () => {
@@ -126,5 +131,34 @@ describe('mock data tests', () => {
     expect(stringEnums).toContain(stringEnum)
   })
 
-  test('fakeTypeArrays can create an array by diffrent actions', () => {})
+  test('fakeRef creat a fake output by ref link', () => {
+    const ref = fakeRef('Pet', definitions)
+    expect(ref).toHaveProperty('type')
+    expect(ref).toHaveProperty('storeIds')
+  })
+
+  test('fakeTypesArray create an array by diffrent actions', () => {
+    const arr = fakeTypesArray(arrayItem.items, typeActions['string'], 3)
+    expect(arr).toHaveLength(3)
+  })
+
+  test('fakeArrays create array from items with length from minItems and maxItems', () => {
+    const arrLength = fakeArrays(arrayItem, definitions).length
+    expect(arrLength).toBeLessThanOrEqual(arrayItem.maxItems)
+    expect(arrLength).toBeGreaterThanOrEqual(arrayItem.minItems)
+    arrayItem.items.enum = stringEnums
+    const arrStringEnumLength = fakeArrays(arrayItem, definitions).length
+    expect(arrStringEnumLength).toBeLessThanOrEqual(arrayItem.maxItems)
+    expect(arrStringEnumLength).toBeGreaterThanOrEqual(arrayItem.minItems)
+    arrayItem.items = refItem
+    const refArrayFirst = fakeArrays(arrayItem, definitions)[0]
+    expect(refArrayFirst).toHaveProperty('type')
+  })
+
+  test('fakeObjectDefinition will fake object structure', () => {
+    definition.properties.pet = refItem
+    const obj = fakeObjectDefinition(definition, definitions)
+    expect(obj).toHaveProperty('id')
+    expect(obj.pet).toHaveProperty('type')
+  })
 })

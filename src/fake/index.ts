@@ -35,10 +35,9 @@ export function fakeObjectDefinition(
       mock[key] = fakeRef(value.$ref, definitions)
       return
     }
-    if (value.format) {
-      // @ts-ignore
-      mock[key] = typeActions[value.type](value)
-    }
+    // @ts-ignore
+    mock[key] = typeActions[value.type](value)
+    return
   })
   return mock
 }
@@ -46,7 +45,10 @@ export function fakeObjectDefinition(
 interface StringLength {
   length: number
 }
-export function fakeRef(ref: string, definitions: Record<string, Definition>): Record<string, any> {
+export function fakeRef(
+  ref: string,
+  definitions: Record<string, Definition>
+): Record<string, any> | unknown[] {
   const definitionName = getRefDefinitionName(ref)
   return fakeByDeinition(definitions[definitionName], definitions)
 }
@@ -116,12 +118,6 @@ export function fakeArrays(
 }
 // @ts-ignore
 export const getFormatterFunction = (format: string): Function => {
-  console.log(
-    'key',
-    typeMapChanceConfig[format] || format,
-    chanceInstance[typeMapChanceConfig[format] || format]
-  )
-
   return chanceInstance[typeMapChanceConfig[format] || format].bind(chanceInstance)
 }
 
