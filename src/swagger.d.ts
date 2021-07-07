@@ -6,13 +6,16 @@ export type Type = 'object' | 'integer' | 'number' | 'string' | 'array' | 'boole
 export interface HeadersObject extends Items {
   description: string
 }
-export interface Schema extends Items {
-  required: string[]
-  description: string
-  allOf: any
-  title: string
-  properties: Record<string, Schema>
-  additionalProperties: Record<string, Schema>
+export interface Schema extends Partial<Omit<Items, 'type'>> {
+  type: Exclude<AllTypes, 'file'>
+  required?: string[]
+  description?: string
+  allOf?: any
+  title?: string
+  properties: Record<string, Partial<Items>>
+  format?: string
+  additionalProperties?: Record<string, Schema>
+  xm?: Record<string, string>
 }
 export interface Items {
   type: Exclude<AllTypes, 'file' | 'object'>
@@ -40,7 +43,7 @@ type ProtoExtend<T, U> = U &
   }
 type AllTypes = 'string' | 'number' | 'integer' | 'boolean' | 'array' | 'file' | 'object'
 
-export type Definition = ProtoExtend<{ type: AllTypes }, Schema>
+export interface Definition extends Schema {}
 
 type LicenseObject = Pick<Tag, 'description' | 'name'>
 
