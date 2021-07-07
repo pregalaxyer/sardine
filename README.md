@@ -19,6 +19,8 @@
 
 - `array` types use `maxItems` & `minItems`
 
+- `enum` types use for `options`
+
 
 
 
