@@ -1,4 +1,10 @@
-import { typeMapChanceConfig, DEFAULT_ARRAY_COUNT, FAKE_OPTIONAL_TRIGGER } from './config'
+import {
+  typeMapChanceConfig,
+  DEFAULT_ARRAY_COUNT,
+  FAKE_OPTIONAL_TRIGGER,
+  FAKE_BY_DEFAULT_RATE,
+  FAKE_BY_DEFAULT
+} from './config'
 
 test('type mapping should contains boolean, int32, float32, number', () => {
   expect(typeMapChanceConfig).toHaveProperty('boolean')
@@ -6,9 +12,9 @@ test('type mapping should contains boolean, int32, float32, number', () => {
   expect(typeMapChanceConfig).toHaveProperty('float32')
 })
 
-test('DEFAULT_ARRAY_COUNT should be 3', () => {
+test('config const tests', () => {
   expect(DEFAULT_ARRAY_COUNT).toBe(3)
-})
-test('FAKE_OPTIONAL_TRIGGER should be true', () => {
+  expect(FAKE_BY_DEFAULT_RATE).toBe(1)
+  expect(FAKE_BY_DEFAULT).toBeTruthy()
   expect(FAKE_OPTIONAL_TRIGGER).toBeTruthy()
 })
