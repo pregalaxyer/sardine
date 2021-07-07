@@ -20,7 +20,7 @@ export interface Schema extends Partial<Omit<Items, 'type'>> {
 export interface Items {
   type: Exclude<AllTypes, 'file' | 'object'>
   $ref: string
-  enum: string[]
+  enum: any[]
   format: string
   items: Items
   collectionFormat: string

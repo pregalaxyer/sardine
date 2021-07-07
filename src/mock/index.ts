@@ -1,6 +1,5 @@
 const Chance = require('chance')
-import { type } from 'os'
-import { Definition, Items, Swagger } from '../swagger'
+import { Definition, Items } from '../swagger'
 import { typeMapChanceConfig, DEFAULT_ARRAY_COUNT } from './config'
 
 const chanceInstance = new Chance()
@@ -74,7 +73,7 @@ export function fakeEnums(enums: Array<string | number | boolean>): string | num
 }
 
 export function fakeArrayCount(min?: number, max?: number): number {
-  return max && max > 1 ? chanceInstance.integer({ min: min || 0, max }) : DEFAULT_ARRAY_COUNT
+  return max && max > 1 ? chanceInstance.integer({ min: min || 1, max }) : DEFAULT_ARRAY_COUNT
 }
 
 type ItemsType = Exclude<Pick<Items, 'type'>['type'], 'file'>
@@ -116,8 +115,15 @@ export function fakeArrays(
   return []
 }
 // @ts-ignore
-export const getFormatterFunction = (format: string): Function =>
-  chanceInstance[typeMapChanceConfig[format] || format].bind(chanceInstance)
+export const getFormatterFunction = (format: string): Function => {
+  console.log(
+    'key',
+    typeMapChanceConfig[format] || format,
+    chanceInstance[typeMapChanceConfig[format] || format]
+  )
+
+  return chanceInstance[typeMapChanceConfig[format] || format].bind(chanceInstance)
+}
 
 export const typeActions: Record<
   'string' | 'number' | 'boolean' | 'integer' | 'array' | 'object' | 'ref',
@@ -140,24 +146,24 @@ export function fakeTypesArray(item: Items, typeAction: Function, count: number)
   return stringArray
 }
 
-export function fakeString(definition: Definition | Items): string {
-  if (Array.isArray(definition.enum)) {
-    return fakeEnums(definition.enum) as string
+export function fakeString(item: Items): string {
+  if (Array.isArray(item.enum)) {
+    return fakeEnums(item.enum) as string
   }
-  const format: string = definition.format || definition.type
+  const format: string = item.format || item.type
   const formatter = getFormatterFunction(format)
-  return formatter(fakeStringLength())
+  return formatter(fakeStringLength(item.minLength, item.maxLength))
 }
 
-export function fakeNumber(definition: Definition | Items): number {
-  if (Array.isArray(definition.enum)) {
-    return fakeEnums(definition.enum) as number
+export function fakeNumber(item: Items): number {
+  if (Array.isArray(item.enum)) {
+    return fakeEnums(item.enum) as number
   }
-  const format: string = definition.format || definition.type
+  const format: string = item.format || item.type
   const formatter: Function = getFormatterFunction(format)
-  return formatter(fakeNumberAmongValue())
+  return formatter(fakeNumberAmongValue(item.minimum, item.maximum))
 }
 
-export function fakeBoolean(definition: Definition | Items): boolean {
+export function fakeBoolean(): boolean {
   return chanceInstance.bool()
 }
