@@ -5,8 +5,6 @@
 
 ### Swagger Schemes
 
-
-
  📖 : [Swagger Schemes](https://swagger.io/specification/v2/#swaggerSchemes)
 
  💡 : <b>Idea</b>
@@ -20,6 +18,8 @@
 - `array` types use `maxItems` & `minItems`
 
 - `enum` types use for `options`
+
+- `default` value use for fake value
 
 
 
