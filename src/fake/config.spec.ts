@@ -16,5 +16,5 @@ test('config const tests', () => {
   expect(DEFAULT_ARRAY_COUNT).toBe(3)
   expect(FAKE_BY_DEFAULT_RATE).toBe(1)
   expect(FAKE_BY_DEFAULT).toBeTruthy()
-  expect(FAKE_OPTIONAL_TRIGGER).toBeTruthy()
+  expect(FAKE_OPTIONAL_TRIGGER).toBeFalsy()
 })

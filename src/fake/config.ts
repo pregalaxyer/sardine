@@ -13,14 +13,14 @@ export const typeMapChanceConfig: Record<string, any> = {
 }
 /**
  * @description default array count, will overwrite by fake options
- *  example: chance.pickset(array,3)
+ *  example: chance.pickset(array,10)
  */
 export const DEFAULT_ARRAY_COUNT: number = 3
 
 /**
  * @description default optional trigger, will overwrite by fake options
  */
-export const FAKE_OPTIONAL_TRIGGER: boolean = true
+export const FAKE_OPTIONAL_TRIGGER: boolean = false
 
 /**
  * @description use default value

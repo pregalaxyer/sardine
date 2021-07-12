@@ -24,12 +24,14 @@ import {
 const Chance = require('chance')
 const definition: Definition = {
   type: 'object',
+  required: ['id'],
   properties: { id: { type: 'integer', format: 'int64' } }
 }
 
 const definitions: Record<string, Definition> = {
   Pet: {
     type: 'object',
+    required: ['type', 'storeIds'],
     properties: {
       type: { type: 'string', enum: ['cat', 'dog', 'pig'] },
       // @ts-ignore
@@ -132,7 +134,7 @@ describe('mock data tests', () => {
   })
 
   test('fakeRef creat a fake output by ref link', () => {
-    const ref = fakeRef('Pet', definitions)
+    const ref = fakeRef('#/definitions/Pet', definitions)
     expect(ref).toHaveProperty('type')
     expect(ref).toHaveProperty('storeIds')
   })

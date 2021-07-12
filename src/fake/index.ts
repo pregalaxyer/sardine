@@ -1,6 +1,7 @@
 const Chance = require('chance')
-import { Definition, Items } from '../swagger'
+import { Definition, Items, Response, Swagger, Schema } from '../swagger'
 import { typeMapChanceConfig, DEFAULT_ARRAY_COUNT, FAKE_OPTIONAL_TRIGGER } from './config'
+import { isString } from '../share'
 
 const chanceInstance = new Chance()
 export { chanceInstance }
@@ -21,14 +22,22 @@ export function getRefDefinitionName(ref: string): string {
 }
 
 export function fakeObjectDefinition(
-  definition: Definition,
+  definition: Definition | Schema,
   definitions: Record<string, Definition>
 ): Record<string, any> {
   const mock: Record<string, any> = {}
-  const properties = definition.properties
+  const properties = definition.properties || definition.additionalProperties
+  /**
+   * no key object, fake key and value
+   */
+  if (properties.type && isString(properties.type)) {
+    // @ts-ignore
+    mock[chanceInstance.string()] = typeActions[properties.type](properties, definitions)
+    return mock
+  }
   Object.entries(properties).forEach(([key, value]) => {
     /**
-     * @description fake optional key, do nothing when key is not required
+     * fake optional key, do nothing when key is not required
      */
     if (FAKE_OPTIONAL_TRIGGER && !definition.required?.includes(key) && fakeBoolean()) {
       return
@@ -42,7 +51,7 @@ export function fakeObjectDefinition(
       return
     }
     // @ts-ignore
-    mock[key] = typeActions[value.type](value)
+    mock[key] = typeActions[value.type](value, definitions)
     return
   })
   return mock
@@ -87,7 +96,7 @@ export function fakeArrayCount(min?: number, max?: number): number {
 type ItemsType = Exclude<Pick<Items, 'type'>['type'], 'file'>
 
 export function fakeArrays(
-  definition: Definition | Items,
+  definition: Definition | Items | Schema,
   definitions: Record<string, Definition>
 ): unknown[] {
   const fakeCount: number = fakeArrayCount(definition.minItems, definition.maxItems)
@@ -171,4 +180,14 @@ export function fakeNumber(item: Items): number {
 export function fakeBoolean(item?: Items): boolean {
   if (item?.default) return item.default
   return chanceInstance.bool()
+}
+
+export function fakeResponse(response: Response, swagger: Swagger) {
+  const schema = response.schema
+  if (schema && schema.type) {
+    // @ts-ignore
+    return typeActions[schema.type](schema, swagger.definitions)
+  } else {
+    return response.description
+  }
 }

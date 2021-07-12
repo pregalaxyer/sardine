@@ -65,7 +65,7 @@ export interface Swagger {
   consumes?: string[]
   produces?: string[]
   tags: Tag[]
-  paths: Path
+  paths: Record<string, Path>
   definitions: Record<string, Definition>
 }
 export type ParameterIn = 'body' | 'query' | 'path' | 'formData'
@@ -83,7 +83,7 @@ interface Response {
   headers: HeadersObject
   schema?: Partial<Schema>
 }
-type SwaggerResponses = Partial<Record<ResponseCode, Response>>
+type SwaggerResponses = Partial<Record<string, Response>>
 
 interface BaseRequestPath {
   tags: string[]
@@ -99,9 +99,10 @@ interface BaseRequestPath {
   security?: Record<string, string[]>
 }
 export type Method = 'post' | 'get' | 'put' | 'delete' | 'head' | 'options' | 'patch' | 'trace'
-export interface Path extends Partial<Record<Method, BaseRequestPath>> {
+export interface Path {
   $ref: Items['$ref']
   parameters: Array<Parameter | Reference>
+  [key: string]: BaseRequestPath | any
 }
 
 interface Reference {

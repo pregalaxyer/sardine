@@ -25,3 +25,7 @@ export const toString: Function = (val: any) => Object.prototype.toString.call(v
 export function isObject(value?: any): value is object {
   return toString(value) === objectTag
 }
+
+export function isString(value: any): value is string {
+  return typeof value === 'string'
+}
