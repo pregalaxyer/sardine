@@ -1,5 +1,6 @@
 import { Definition, Items } from '../swagger'
 import { DEFAULT_ARRAY_COUNT } from './config'
+import { isString } from '../share'
 import {
   chanceInstance,
   fakeEnums,
@@ -16,8 +17,13 @@ import {
   fakeRef,
   fakeArrays,
   fakeTypesArray,
-  fakeObjectDefinition
+  fakeObjectDefinition,
+  fakeResponse
 } from './index'
+jest.mock('../share', () => ({
+  __esModule: true,
+  isString: jest.fn().mockImplementation(str => typeof str === 'string')
+}))
 /**
  * @description global defintion here
  */
@@ -160,7 +166,20 @@ describe('mock data tests', () => {
   test('fakeObjectDefinition will fake object structure', () => {
     definition.properties.pet = refItem
     const obj = fakeObjectDefinition(definition, definitions)
+    expect(isString).toBeCalled()
     expect(obj).toHaveProperty('id')
     expect(obj.pet).toHaveProperty('type')
+  })
+
+  test('fakeResponse fake data from scheme', () => {
+    // @ts-ignore
+    const response = fakeResponse({ description: 'success operation' }, {})
+    expect(response).toBe('success operation')
+    const responseSchema = fakeResponse(
+      { schema: { type: 'object', additionalProperties: { type: 'string' } }, description: 'test' },
+      definitions
+    )
+    expect(isString).toBeCalledWith('string')
+    expect(responseSchema).toBeDefined()
   })
 })

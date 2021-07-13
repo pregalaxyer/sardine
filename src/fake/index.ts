@@ -182,11 +182,11 @@ export function fakeBoolean(item?: Items): boolean {
   return chanceInstance.bool()
 }
 
-export function fakeResponse(response: Response, swagger: Swagger) {
+export function fakeResponse(response: Response, definitions: Record<string, Definition>) {
   const schema = response.schema
   if (schema && schema.type) {
     // @ts-ignore
-    return typeActions[schema.type](schema, swagger.definitions)
+    return typeActions[schema.type](schema, definitions)
   } else {
     return response.description
   }

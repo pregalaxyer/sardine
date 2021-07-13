@@ -14,7 +14,7 @@ export interface Schema extends Partial<Omit<Items, 'type'>> {
   title?: string
   properties: Record<string, Partial<Items>>
   format?: string
-  additionalProperties?: Record<string, Schema>
+  additionalProperties?: Record<string, string | Schema>
   xm?: Record<string, string>
 }
 export interface Items {
@@ -80,7 +80,7 @@ type ResponseCode = '200' | '400' | '405' | '404' | '405'
 interface Response {
   description: string
   examples?: Record<string, any>
-  headers: HeadersObject
+  headers?: HeadersObject
   schema?: Partial<Schema>
 }
 type SwaggerResponses = Partial<Record<string, Response>>

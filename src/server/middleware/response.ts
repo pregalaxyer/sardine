@@ -28,7 +28,7 @@ export function handlerResponse(responses: SwaggerResponses, swagger: Swagger): 
   if (statusOk) {
     return {
       status: 200,
-      body: fakeResponse(statusOk, swagger)
+      body: fakeResponse(statusOk, swagger.definitions)
     }
   } else {
     const codeList: string[] = Object.keys(responses)

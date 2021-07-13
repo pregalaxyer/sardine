@@ -112,10 +112,10 @@
     "typescript": "^3.0.3"
   },
   "dependencies": {
+    "@koa/cors": "^3.1.0",
     "@types/koa": "^2.13.4",
     "chance": "^1.1.7",
     "koa": "^2.13.1",
-    "nock": "^13.1.1",
     "node-fetch": "^2.6.1"
   }
 }
