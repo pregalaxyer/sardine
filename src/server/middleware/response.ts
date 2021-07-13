@@ -17,14 +17,15 @@ const fakeResponseMiddleWare: (swagger: Swagger) => Middleware = swagger => asyn
     }
   `
   )
+  await next()
 }
 
 export function getSwaggerPathResponse(swagger: Swagger, path: string, method: string) {
-  return swagger.paths[path][method]?.responses
+  return swagger.paths[path][method].responses
 }
 
 export function handlerResponse(responses: SwaggerResponses, swagger: Swagger): FakeResponseData {
-  const statusOk = responses[200]
+  const statusOk = responses?.[200]
   if (statusOk) {
     return {
       status: 200,

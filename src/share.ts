@@ -1,7 +1,7 @@
 import fetch from 'node-fetch'
 import { Swagger } from './swagger.d'
 
-export async function getSwaggerJsonFromUrl(url: string): Promise<Swagger | void> {
+export async function getSwaggerJsonFromUrl(url: string): Promise<Swagger> {
   const data: Swagger = await fetch(url).then((res: { json: () => any }) => res.json())
   return data
 }
