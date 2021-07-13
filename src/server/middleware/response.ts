@@ -1,6 +1,6 @@
 import { Middleware } from 'koa'
 import { fakeResponse } from '../../fake'
-import { FakeResponseData, DEFAULT_RESPONSE } from '../config'
+import { FakeResponseData, DEFAULT_RESPONSE_DATA } from '../config'
 import { Swagger, SwaggerResponses } from '../../swagger'
 const fakeResponseMiddleWare: (swagger: Swagger) => Middleware = swagger => async (ctx, next) => {
   const { path, method } = ctx.request
@@ -39,7 +39,7 @@ export function handlerResponse(responses: SwaggerResponses, swagger: Swagger): 
         body: responses[codeList[0]]?.description
       }
     } else {
-      return DEFAULT_RESPONSE
+      return DEFAULT_RESPONSE_DATA
     }
   }
 }
