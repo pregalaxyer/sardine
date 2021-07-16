@@ -3,7 +3,7 @@ import { getSwaggerJsonFromUrl } from '../../share'
 import { Swagger } from '../../swagger'
 import { DEFAULT_RESPONSE_DATA } from '../config'
 let swagger: Swagger
-beforeEach(async () => {
+beforeAll(async () => {
   swagger = await getSwaggerJsonFromUrl('https://petstore.swagger.io/v2/swagger.json')
 })
 
@@ -22,6 +22,8 @@ describe('response middleware tests', () => {
   test('getSwaggerPathResponse will output swagger response ', () => {
     const response = getSwaggerPathResponse(swagger, '/pet', 'post')
     expect(response).toHaveProperty('405')
+    const responseMathReg = getSwaggerPathResponse(swagger, '/pet/{petId}', 'get')
+    expect(responseMathReg).toBeDefined()
   })
   test('handlerResponse will create fake response as expect', () => {
     const { status, body } = handlerResponse(

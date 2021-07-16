@@ -1,4 +1,4 @@
-const Chance = require('chance')
+import * as Chance from 'chance'
 import { Definition, Items, Response, Swagger, Schema } from '../swagger'
 import { typeMapChanceConfig, DEFAULT_ARRAY_COUNT, FAKE_OPTIONAL_TRIGGER } from './config'
 import { isString } from '../share'
@@ -133,6 +133,7 @@ export function fakeArrays(
 }
 // @ts-ignore
 export const getFormatterFunction = (format: string): Function => {
+  // @ts-ignore
   return chanceInstance[typeMapChanceConfig[format] || format].bind(chanceInstance)
 }
 
