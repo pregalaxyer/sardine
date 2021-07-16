@@ -26,7 +26,8 @@ export default {
     // Allow json resolution
     // Compile TypeScript files
     typescript({
-      tsConfig: './tsconfig.json'
+      tsconfig: './tsconfig.json',
+      exclude: [/\.spec\.ts$/]
     }),
     // Allow node_modules resolution, so you can use 'external' to control
     // which external modules to include in the bundle

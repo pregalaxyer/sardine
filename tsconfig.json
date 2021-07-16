@@ -10,15 +10,15 @@
     "skipLibCheck": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "declarationDir": "dist/types",
-    "outDir": "dist/lib",
+    "declarationDir": ".",
+    "outDir": "dist",
     "types": ["node", "jest"]
   },
   "include": [
-    "src",
-
+    "src/**/*"
   ],
   "exclude": [
-    "node_modules/*"
+    "node_modules/*",
+
   ]
 }

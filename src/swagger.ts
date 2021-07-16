@@ -77,13 +77,13 @@ export interface Parameter extends Partial<Items> {
   schema?: Partial<Definition>
 }
 type ResponseCode = '200' | '400' | '405' | '404' | '405'
-interface Response {
+export interface Response {
   description: string
   examples?: Record<string, any>
   headers?: HeadersObject
   schema?: Partial<Schema>
 }
-type SwaggerResponses = Partial<Record<string, Response>>
+export type SwaggerResponses = Partial<Record<string, Response>>
 
 interface BaseRequestPath {
   tags: string[]

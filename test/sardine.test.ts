@@ -1,7 +1,7 @@
 import Sardine from '../src/sardine'
 import fetch from 'node-fetch'
 
-jest.setTimeout(50000000)
+jest.setTimeout(100000)
 /**
  * Dummy test
  */
@@ -12,14 +12,24 @@ describe('Sardine test', () => {
       port: 9000
     })
     setTimeout(() => {
-      fetch(`http://localhost:${sardine.port}/store/inventory`)
-        .then(res => {
-          console.log('1', res)
-          return res.json()
-        })
-        .then(res => {
-          expect(res).toBeDefined()
-        })
+      Promise.all([
+        fetch(`http://localhost:${sardine.port}/store/inventory`)
+          .then(res => {
+            console.log('1', res)
+            return res.json()
+          })
+          .then(res => {
+            expect(res).toBeDefined()
+          }),
+        fetch(`http://localhost:${sardine.port}/store/inventory`)
+          .then(res => {
+            console.log('1', res)
+            return res.json()
+          })
+          .then(res => {
+            expect(res).toBeDefined()
+          })
+      ])
     }, 5000)
   })
 })

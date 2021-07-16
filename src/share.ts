@@ -1,5 +1,5 @@
 import fetch from 'node-fetch'
-import { Swagger } from './swagger.d'
+import { Swagger } from './swagger'
 
 /**
  * swagger parameters in path handler
