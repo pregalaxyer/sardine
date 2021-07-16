@@ -20,9 +20,9 @@ jest.mock('koa', () => ({
   })
 }))
 
-test('initKoa tests', () => {
+test('initKoa tests', async () => {
   // @ts-ignore
-  const app = initKoa({})
+  const app = await initKoa({})
   expect(Koa).toBeCalled()
   expect(fakeResponseMiddleWare).toBeCalled
 })

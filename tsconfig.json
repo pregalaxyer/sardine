@@ -1,22 +1,24 @@
 {
   "compilerOptions": {
     "moduleResolution": "node",
-    "target": "es5",
-    "module":"esnext",
-    "lib": ["esnext",  "es6"],
+    "module": "esnext",
+    "target": "esnext",
+    "lib": ["esnext", "dom", "ES6"],
     "strict": true,
     "declaration": true,
     "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "declarationDir": "dist/types",
     "outDir": "dist/lib",
-    "types": ["node", "jest"],
-    "typeRoots": [
-      "node_modules/@types"
-    ]
+    "types": ["node", "jest"]
   },
   "include": [
-    "src"
+    "src",
+
+  ],
+  "exclude": [
+    "node_modules/*"
   ]
 }

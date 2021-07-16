@@ -1,8 +1,13 @@
 import { Middleware } from 'koa'
 import { fakeResponse } from '../../fake'
 import { FakeResponseData, DEFAULT_RESPONSE_DATA } from '../config'
-import { Swagger, SwaggerResponses } from '../../swagger'
-const fakeResponseMiddleWare: (swagger: Swagger) => Middleware = swagger => async (ctx, next) => {
+import { SwaggerResponses } from '../../swagger'
+import { SwaggerPathInParameters } from '../../share'
+
+const fakeResponseMiddleWare: (swagger: SwaggerPathInParameters) => Middleware = swagger => async (
+  ctx,
+  next
+) => {
   const { path, method } = ctx.request
   const responses = getSwaggerPathResponse(swagger, path, method)
   const { status, body } = handlerResponse(responses, swagger)
@@ -20,11 +25,21 @@ const fakeResponseMiddleWare: (swagger: Swagger) => Middleware = swagger => asyn
   await next()
 }
 
-export function getSwaggerPathResponse(swagger: Swagger, path: string, method: string) {
-  return swagger.paths[path][method].responses
+export function getSwaggerPathResponse(
+  swagger: SwaggerPathInParameters,
+  path: string,
+  method: string
+) {
+  const lowCaseMethod = method.toLowerCase()
+  if (swagger.paths[path]) return swagger.paths[path][lowCaseMethod].responses
+  const reg: undefined | RegExp = swagger.regPaths?.filter(reg => reg.test(path))[0]
+  return reg && swagger.paths[swagger.regPathMap?.get(reg) as string][lowCaseMethod].responses
 }
 
-export function handlerResponse(responses: SwaggerResponses, swagger: Swagger): FakeResponseData {
+export function handlerResponse(
+  responses: SwaggerResponses,
+  swagger: SwaggerPathInParameters
+): FakeResponseData {
   const statusOk = responses?.[200]
   if (statusOk) {
     return {

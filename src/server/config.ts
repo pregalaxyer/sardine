@@ -10,4 +10,4 @@ export const DEFAULT_RESPONSE_DATA: FakeResponseData = {
   body: 'ok'
 }
 
-export const KOA_HOST: number = 9000
+export const KOA_PORT: number = 55555

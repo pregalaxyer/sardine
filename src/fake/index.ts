@@ -178,7 +178,7 @@ export function fakeNumber(item: Items): number {
 }
 
 export function fakeBoolean(item?: Items): boolean {
-  if (item?.default) return item.default
+  if (item?.default) return item.default as boolean
   return chanceInstance.bool()
 }
 
