@@ -11,25 +11,28 @@ describe('Sardine test', () => {
       url: 'https://petstore.swagger.io/v2/swagger.json',
       port: 9000
     })
-    setTimeout(() => {
-      Promise.all([
-        fetch(`http://localhost:${sardine.port}/store/inventory`)
-          .then(res => {
-            console.log('1', res)
-            return res.json()
-          })
-          .then(res => {
-            expect(res).toBeDefined()
-          }),
-        fetch(`http://localhost:${sardine.port}/store/inventory`)
-          .then(res => {
-            console.log('1', res)
-            return res.json()
-          })
-          .then(res => {
-            expect(res).toBeDefined()
-          })
-      ])
-    }, 5000)
+    await new Promise(resolve => {
+      setTimeout(async () => {
+        await Promise.all([
+          fetch(`http://localhost:${sardine.port}/store/inventory`)
+            .then(res => {
+              return res.json()
+            })
+            .then(res => {
+              console.log(1, res)
+              expect(res).toBeDefined()
+            }),
+          fetch(`http://localhost:${sardine.port}/store/inventory`)
+            .then(res => {
+              return res.json()
+            })
+            .then(res => {
+              console.log(2, res)
+              expect(res).toBeDefined()
+            })
+        ])
+        resolve(1)
+      }, 3000)
+    })
   })
 })
