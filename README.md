@@ -1,5 +1,11 @@
 ## Sardine
 
+<p>
+<img src="https://img.shields.io/travis/com/diveDylan/sardine" />
+<img src="https://img.shields.io/codecov/c/github/diveDylan/sardine" />
+
+</p>
+
 `Sardine` is a fake serve tool via `swagger`, `chance`, `nock`. It will check `request` and return `response`. You can set swagger `format` property with chance method name to fake different types data~
 
 
@@ -25,7 +31,7 @@
 
 ### Name
 
-Why Sardine, 
+Why sardine ?
 
 
 
