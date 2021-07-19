@@ -17,7 +17,6 @@ export default class Sardine {
   public port?: number
   public defaultFakeConfigs: SardineOptions['defaultFakeConfigs']
   public koaMiddleware: SardineOptions['koaMiddleware']
-
   constructor(options: SardineOptions) {
     this.url = options.url
     this.port = options.port || KOA_PORT
@@ -26,6 +25,7 @@ export default class Sardine {
     this.koaMiddleware = options.koaMiddleware
     this.init()
   }
+
   /**
    * get swagger json and create koa server
    */
