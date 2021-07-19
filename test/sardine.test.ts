@@ -1,7 +1,6 @@
 import Sardine from '../src/sardine'
 import fetch from 'node-fetch'
 
-jest.setTimeout(100000)
 /**
  * Dummy test
  */
