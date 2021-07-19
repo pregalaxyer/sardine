@@ -21,7 +21,7 @@
     "build": " rollup -c rollup.config.ts ",
     "start": "rollup -c rollup.config.ts -w",
     "test": "jest",
-    "test:cov": "jest --coverage --no-cache",
+    "test:cov": "jest --coverage --no-cache --detectOpenHandles --forceExit",
     "codecov": "codecov --tokean=c2eba3bd-e6e1-4a08-b226-fe0829dcd151",
     "test:prod": "npm run lint && npm run test -- --no-cache",
     "deploy-docs": "ts-node tools/gh-pages-publish",

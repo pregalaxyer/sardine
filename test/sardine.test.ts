@@ -5,13 +5,14 @@ import fetch from 'node-fetch'
  * Dummy test
  */
 describe('Sardine test', () => {
-  test('sardine instance', async () => {
+  let timer: NodeJS.Timeout
+  test('sardine instance', async done => {
     const sardine = new Sardine({
       url: 'https://petstore.swagger.io/v2/swagger.json',
       port: 9000
     })
     await new Promise(resolve => {
-      setTimeout(async () => {
+      timer = setTimeout(async () => {
         await Promise.all([
           fetch(`http://localhost:${sardine.port}/store/inventory`)
             .then(res => {
@@ -31,7 +32,12 @@ describe('Sardine test', () => {
             })
         ])
         resolve(1)
+        done()
       }, 3000)
     })
+  })
+  afterAll(done => {
+    clearTimeout(timer)
+    done()
   })
 })
