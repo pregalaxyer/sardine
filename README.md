@@ -13,7 +13,7 @@
 
  📖 : [Swagger Schemes](https://swagger.io/specification/v2/#swaggerSchemes)
 
- 💡 : <b>Idea</b>
+ 💡 : <b>Newton's apple</b>
 > However, the format property is an open string-valued property, and can have any value to support documentation needs. Formats such as "email", "uuid", etc., can be used even though they are not defined by this specification
 
 🚥 : <b>Rules</b>
