@@ -8,7 +8,6 @@ interface SardineOptions {
   port?: number
   defaultFakeConfigs?: Record<string, any>
   koaMiddleware?: Middleware
-  // TODO: nock config
 }
 export default class Sardine {
   public koa: Koa | undefined

@@ -6,7 +6,7 @@
 
 </p>
 
-`Sardine` is a fake serve tool via `swagger`, `chance`, `nock`. It will check `request` and return `response`. You can set swagger `format` property with chance method name to fake different types data~
+`Sardine` is a fake serve tool via `swagger`, `chance`, `koa`. It will check `request` and return `response`. You can set swagger `format` property with chance method name to fake different types data~
 
 
 ### Swagger Schemes
