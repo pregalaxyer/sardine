@@ -10,9 +10,15 @@ const fakeResponseMiddleWare: (swagger: SwaggerPathInParameters) => Middleware =
 ) => {
   const { path, method } = ctx.request
   const responses = getSwaggerPathResponse(swagger, path, method)
-  const { status, body } = handlerResponse(responses, swagger)
-  ctx.body = body
-  ctx.status = status
+  if (responses) {
+    const { status, body } = handlerResponse(responses, swagger)
+    ctx.body = body
+    ctx.status = status
+  } else {
+    const { status, body } = DEFAULT_RESPONSE_DATA
+    ctx.body = body
+    ctx.status = status
+  }
   console.log(
     'fake response success by sardine🐟 : ' +
       `
@@ -22,6 +28,7 @@ const fakeResponseMiddleWare: (swagger: SwaggerPathInParameters) => Middleware =
     }
   `
   )
+
   await next()
 }
 

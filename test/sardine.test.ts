@@ -22,7 +22,7 @@ describe('Sardine test', () => {
               console.log(1, res)
               expect(res).toBeDefined()
             }),
-          fetch(`http://localhost:${sardine.port}/store/inventory`)
+          fetch(`http://localhost:${sardine.port}/pet/1`)
             .then(res => {
               return res.json()
             })

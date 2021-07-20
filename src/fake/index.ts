@@ -1,4 +1,4 @@
-import * as Chance from 'chance'
+const Chance = require('chance')
 import { Definition, Items, Response, Swagger, Schema } from '../swagger'
 import { typeMapChanceConfig, DEFAULT_ARRAY_COUNT, FAKE_OPTIONAL_TRIGGER } from './config'
 import { isString } from '../share'
@@ -185,9 +185,11 @@ export function fakeBoolean(item?: Items): boolean {
 
 export function fakeResponse(response: Response, definitions: Record<string, Definition>) {
   const schema = response.schema
-  if (schema && schema.type) {
+  if (schema) {
     // @ts-ignore
-    return typeActions[schema.type](schema, definitions)
+    if (schema.type) return typeActions[schema.type](schema, definitions)
+    if (schema.$ref) return fakeRef(schema.$ref, definitions)
+    return response.description
   } else {
     return response.description
   }
