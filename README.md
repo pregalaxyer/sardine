@@ -16,6 +16,46 @@
 `Sardine` is a fake serve tool via `swagger`, `chance`, `koa`. It will check `request` and return `response`. You can set swagger `format` property with chance method name to fake different types data~
 
 
+### Install
+
+``` bash
+npm install sardine -D
+//or
+yarn add sardine -D
+
+```
+
+### Usage
+
+```js
+const Sardine = require('sardine')
+
+new Sardine({
+  url: 'https://petstore.swagger.io/v2/swagger.json',
+  port: 9000
+})
+
+```
+
+`Options`:
+``` typescript
+interface SardineOptions {
+  url: string
+  port?: number
+  defaultFakeConfigs?: Record<string, any>
+  koaMiddleware?: Middleware
+}
+
+
+```
+- `url` swagger json url
+- `port` mock sever port
+- `defaultFakeConfigs` TODO
+- `koaMiddleware` middleware use in koa mock server
+
+
+
+
 ### Swagger Schemes
 
  📖 : [Swagger Schemes](https://swagger.io/specification/v2/#swaggerSchemes)
@@ -33,6 +73,9 @@
 - `enum` types use for `options`
 
 - `default` value use for fake value
+
+
+
 
 
 
