@@ -13,7 +13,7 @@
 
 
 
-`Sardine` is a fake serve tool via `swagger`, `chance`, `koa`. It will check `request` and return `response`. You can set swagger `format` property with chance method name to fake different types data~
+`Sardine` is one step mock tool,  via `swagger v2`, `chance`, `koa`. It will check `request` and return `response`. You can set swagger `format` property with chance method name to fake different types data~
 
 
 ### Install
