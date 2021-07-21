@@ -1,8 +1,8 @@
 import { Definition, Items } from '../swagger'
 import { DEFAULT_ARRAY_COUNT } from './config'
 import { isString } from '../share'
+import { chanceInstance } from '../sardine'
 import {
-  chanceInstance,
   fakeEnums,
   typeActions,
   getFormatterFunction,
@@ -24,10 +24,11 @@ jest.mock('../share', () => ({
   __esModule: true,
   isString: jest.fn().mockImplementation(str => typeof str === 'string')
 }))
+
 /**
  * @description global defintion here
  */
-const Chance = require('chance')
+
 const definition: Definition = {
   type: 'object',
   required: ['id'],
@@ -70,10 +71,6 @@ const refItem: Items = {
 const arrayItem: Items = { type: 'array', items: { type: 'string' }, minItems: 1, maxItems: 4 }
 
 describe('mock data tests', () => {
-  test('chanceInstance should be defined', () => {
-    expect(chanceInstance).toBeInstanceOf(Chance)
-  })
-
   test('typeActions should has property string, array, number, boolean', () => {
     expect(typeActions).toHaveProperty('string')
     expect(typeActions).toHaveProperty('array')
@@ -113,6 +110,9 @@ describe('mock data tests', () => {
     expect(fakeArrayCount(0, 10)).toBeGreaterThanOrEqual(1)
     expect(fakeArrayCount(0, 10)).toBeLessThanOrEqual(10)
     expect(fakeArrayCount()).toBe(DEFAULT_ARRAY_COUNT)
+    chanceInstance.__DEFAULT_ARRAY_COUNT = 10
+    expect(fakeArrayCount()).toBe(10)
+    chanceInstance.__DEFAULT_ARRAY_COUNT = null
   })
 
   test('fakeNumber should return number or number in enum', () => {
@@ -161,6 +161,8 @@ describe('mock data tests', () => {
     arrayItem.items = refItem
     const refArrayFirst = fakeArrays(arrayItem, definitions)[0]
     expect(refArrayFirst).toHaveProperty('type')
+    // @ts-ignore
+    expect(fakeArrays({}, definitions)).toHaveLength(0)
   })
 
   test('fakeObjectDefinition will fake object structure', () => {
@@ -181,5 +183,7 @@ describe('mock data tests', () => {
     )
     expect(isString).toBeCalledWith('string')
     expect(responseSchema).toBeDefined()
+    // @ts-ignore
+    expect(fakeResponse({ schema: {}, description: 'ok' }, {})).toBe('ok')
   })
 })

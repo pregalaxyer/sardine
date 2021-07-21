@@ -1,10 +1,7 @@
-const Chance = require('chance')
 import { Definition, Items, Response, Swagger, Schema } from '../swagger'
 import { typeMapChanceConfig, DEFAULT_ARRAY_COUNT, FAKE_OPTIONAL_TRIGGER } from './config'
 import { isString } from '../share'
-
-const chanceInstance = new Chance()
-export { chanceInstance }
+import { chanceInstance } from '../sardine'
 
 export function fakeByDeinition(
   definition: Definition | Items,
@@ -90,6 +87,8 @@ export function fakeEnums(enums: Array<string | number | boolean>): string | num
 }
 
 export function fakeArrayCount(min?: number, max?: number): number {
+  if (typeof chanceInstance.__DEFAULT_ARRAY_COUNT === 'number')
+    return chanceInstance.__DEFAULT_ARRAY_COUNT
   return max && max > 1 ? chanceInstance.integer({ min: min || 1, max }) : DEFAULT_ARRAY_COUNT
 }
 

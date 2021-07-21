@@ -1,7 +1,7 @@
 import fakeResponseMiddleWare, { getSwaggerPathResponse, handlerResponse } from './response'
 import { getSwaggerJsonFromUrl } from '../../share'
 import { Swagger } from '../../swagger'
-import { DEFAULT_RESPONSE_DATA } from '../config'
+import { DEFAULT_RESPONSE_DATA, DEFAULT_RESPONSE } from '../config'
 let swagger: Swagger
 beforeAll(async () => {
   swagger = await getSwaggerJsonFromUrl('https://petstore.swagger.io/v2/swagger.json')
@@ -24,6 +24,8 @@ describe('response middleware tests', () => {
     expect(response).toHaveProperty('405')
     const responseMathReg = getSwaggerPathResponse(swagger, '/pet/{petId}', 'get')
     expect(responseMathReg).toBeDefined()
+    const defaultResponse = getSwaggerPathResponse(swagger, '/pet/{petId}/{sdsd}', 'get')
+    expect(defaultResponse).toBe(DEFAULT_RESPONSE)
   })
   test('handlerResponse will create fake response as expect', () => {
     const { status, body } = handlerResponse(

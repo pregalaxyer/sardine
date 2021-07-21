@@ -2,6 +2,10 @@ import Koa, { Middleware } from 'koa'
 import { getSwaggerJsonFromUrl, SwaggerPathInParameters } from './share'
 import { initKoa } from './server'
 import { KOA_PORT } from './server/config'
+const Chance = require('chance')
+
+const chanceInstance = new Chance()
+export { chanceInstance }
 
 interface SardineOptions {
   url: string
@@ -9,7 +13,14 @@ interface SardineOptions {
   defaultFakeConfigs?: Record<string, any>
   koaMiddleware?: Middleware
 }
+
 export default class Sardine {
+  public chanceInstance: {
+    /**
+     * config chance fake count of arrays
+     */
+    __DEFAULT_ARRAY_COUNT?: number
+  } = chanceInstance
   public koa: Koa | undefined
   public swagger: SwaggerPathInParameters | undefined
   public url: SardineOptions['url']
@@ -30,7 +41,7 @@ export default class Sardine {
    */
   init = async () => {
     this.swagger = await getSwaggerJsonFromUrl(this.url)
-    this.koa = await initKoa(this.swagger)
+    this.koa = initKoa(this.swagger)
     this.koaMiddleware && this.koa.use(this.koaMiddleware)
     const schemes = this.swagger.schemes ? this.swagger.schemes[0] : 'http'
     const fullScheme = schemes.endsWith('://') ? schemes : schemes + '://'

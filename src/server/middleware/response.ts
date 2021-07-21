@@ -1,6 +1,6 @@
 import { Middleware } from 'koa'
 import { fakeResponse } from '../../fake'
-import { FakeResponseData, DEFAULT_RESPONSE_DATA } from '../config'
+import { FakeResponseData, DEFAULT_RESPONSE_DATA, DEFAULT_RESPONSE } from '../config'
 import { SwaggerResponses } from '../../swagger'
 import { SwaggerPathInParameters } from '../../share'
 
@@ -10,15 +10,9 @@ const fakeResponseMiddleWare: (swagger: SwaggerPathInParameters) => Middleware =
 ) => {
   const { path, method } = ctx.request
   const responses = getSwaggerPathResponse(swagger, path, method)
-  if (responses) {
-    const { status, body } = handlerResponse(responses, swagger)
-    ctx.body = body
-    ctx.status = status
-  } else {
-    const { status, body } = DEFAULT_RESPONSE_DATA
-    ctx.body = body
-    ctx.status = status
-  }
+  const { status, body } = handlerResponse(responses, swagger)
+  ctx.body = body
+  ctx.status = status
   console.log(
     'fake response success by sardine🐟 : ' +
       `
@@ -28,7 +22,6 @@ const fakeResponseMiddleWare: (swagger: SwaggerPathInParameters) => Middleware =
     }
   `
   )
-
   await next()
 }
 
@@ -40,7 +33,10 @@ export function getSwaggerPathResponse(
   const lowCaseMethod = method.toLowerCase()
   if (swagger.paths[path]) return swagger.paths[path][lowCaseMethod].responses
   const reg: undefined | RegExp = swagger.regPaths?.filter(reg => reg.test(path))[0]
-  return reg && swagger.paths[swagger.regPathMap?.get(reg) as string][lowCaseMethod].responses
+  return reg
+    ? swagger.paths[swagger.regPathMap?.get(reg) as string][lowCaseMethod].responses ||
+        DEFAULT_RESPONSE
+    : DEFAULT_RESPONSE
 }
 
 export function handlerResponse(

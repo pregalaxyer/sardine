@@ -28,7 +28,7 @@ yarn add sardine -D
 ### Usage
 
 ```js
-const Sardine = require('sardine')
+const Sardine = require('sardine').default
 
 new Sardine({
   url: 'https://petstore.swagger.io/v2/swagger.json',

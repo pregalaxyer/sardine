@@ -1,3 +1,4 @@
+import { SwaggerResponses } from '../swagger'
 export interface FakeResponseData {
   status: number
   body: any
@@ -11,3 +12,10 @@ export const DEFAULT_RESPONSE_DATA: FakeResponseData = {
 }
 
 export const KOA_PORT: number = 55555
+
+export const DEFAULT_RESPONSE: SwaggerResponses = {
+  '200': {
+    schema: {},
+    description: 'ok'
+  }
+}

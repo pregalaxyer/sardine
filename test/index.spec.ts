@@ -1,12 +1,9 @@
-import Sardine from '../src/sardine'
+const Sardine = require('../dist/sardine.umd').default
 import fetch from 'node-fetch'
 
-/**
- * Dummy test
- */
-describe('Sardine test', () => {
+describe('sardine lib tests', () => {
   let timer: NodeJS.Timeout
-  test('sardine instance', async done => {
+  test('mock data with sardine', async done => {
     const sardine = new Sardine({
       url: 'https://petstore.swagger.io/v2/swagger.json',
       port: 9000
