@@ -4,7 +4,7 @@ import { initKoa } from './server'
 import { KOA_PORT } from './server/config'
 const Chance = require('chance')
 
-const chanceInstance = new Chance()
+const chanceInstance: InstanceType<any> = new Chance()
 export { chanceInstance }
 
 interface SardineOptions {
@@ -15,6 +15,9 @@ interface SardineOptions {
 }
 
 export default class Sardine {
+  /**
+   * make it is possible to config your chanceInstance
+   */
   public chanceInstance: {
     /**
      * config chance fake count of arrays
