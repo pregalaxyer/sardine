@@ -16,7 +16,6 @@ describe('sardine lib tests', () => {
               return res.json()
             })
             .then(res => {
-              console.log(1, res)
               expect(res).toBeDefined()
             }),
           fetch(`http://localhost:${sardine.port}/pet/1`)
@@ -24,7 +23,6 @@ describe('sardine lib tests', () => {
               return res.json()
             })
             .then(res => {
-              console.log(2, res)
               expect(res).toBeDefined()
             })
         ])

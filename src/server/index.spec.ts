@@ -14,15 +14,19 @@ jest.mock('koa', () => ({
   default: jest.fn().mockImplementation(function Koa() {
     let object = {
       listen: jest.fn(),
-      use: jest.fn()
+      use: jest.fn().mockImplementation(fn => {
+        fn
+      })
     }
     return object
   })
 }))
 
 test('initKoa tests', () => {
+  const middlewareFn = jest.fn()
   // @ts-ignore
-  const app = initKoa({})
+  const app = initKoa({}, [middlewareFn])
   expect(Koa).toBeCalled()
   expect(fakeResponseMiddleWare).toBeCalled
+  expect(middlewareFn).toBeCalled
 })

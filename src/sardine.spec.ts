@@ -25,11 +25,11 @@ describe('Sardine test', () => {
   })
 
   test('sardine class', async () => {
-    const koaMiddleware = jest.fn()
+    const responseMiddleWare = jest.fn()
     const sardine = new Sardine({
       url: 'https://petstore.swagger.io/v2/swagger.json',
       port: 9000,
-      koaMiddleware
+      responseMiddleWares: [responseMiddleWare]
     })
     const log = jest.spyOn(console, 'log')
     await new Promise(resolve => {
@@ -40,7 +40,7 @@ describe('Sardine test', () => {
     })
     expect(getSwaggerJsonFromUrl).toBeCalled()
     expect(initKoa).toBeCalled()
-    expect(koaMiddleware).toBeCalled()
+    expect(responseMiddleWare).toBeCalled()
     expect(log).toBeCalled()
   })
 })

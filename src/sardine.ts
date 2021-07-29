@@ -11,7 +11,8 @@ interface SardineOptions {
   url: string
   port?: number
   defaultFakeConfigs?: Record<string, any>
-  koaMiddleware?: Middleware
+  requestMiddlewares?: Middleware[]
+  responseMiddleWares?: Middleware[]
 }
 
 export default class Sardine {
@@ -29,13 +30,15 @@ export default class Sardine {
   public url: SardineOptions['url']
   public port?: number
   public defaultFakeConfigs: SardineOptions['defaultFakeConfigs']
-  public koaMiddleware: SardineOptions['koaMiddleware']
+  public requestMiddlewares?: Middleware[]
+  public responseMiddleWares?: Middleware[]
   constructor(options: SardineOptions) {
     this.url = options.url
     this.port = options.port || KOA_PORT
     //TODO default fake config
     this.defaultFakeConfigs = options.defaultFakeConfigs || {}
-    this.koaMiddleware = options.koaMiddleware
+    this.requestMiddlewares = options.requestMiddlewares
+    this.responseMiddleWares = options.responseMiddleWares
     this.init()
   }
 
@@ -44,8 +47,13 @@ export default class Sardine {
    */
   init = async () => {
     this.swagger = await getSwaggerJsonFromUrl(this.url)
-    this.koa = initKoa(this.swagger)
-    this.koaMiddleware && this.koa.use(this.koaMiddleware)
+    this.koa = initKoa(this.swagger, this.requestMiddlewares)
+    if (this.responseMiddleWares && this.responseMiddleWares) {
+      this.responseMiddleWares.forEach(middleware => {
+        // @ts-ignore
+        this.koa.use(middleware)
+      })
+    }
     const schemes = this.swagger.schemes ? this.swagger.schemes[0] : 'http'
     const fullScheme = schemes.endsWith('://') ? schemes : schemes + '://'
     console.log(

@@ -3,8 +3,12 @@ import { getSwaggerJsonFromUrl } from '../../share'
 import { Swagger } from '../../swagger'
 import { DEFAULT_RESPONSE_DATA, DEFAULT_RESPONSE } from '../config'
 let swagger: Swagger
+jest.setTimeout(5000)
 beforeAll(async () => {
   swagger = await getSwaggerJsonFromUrl('https://petstore.swagger.io/v2/swagger.json')
+})
+afterAll(() => {
+  jest.clearAllTimers()
 })
 
 describe('response middleware tests', () => {
