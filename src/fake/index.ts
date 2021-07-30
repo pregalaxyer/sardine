@@ -1,8 +1,30 @@
 import { Definition, Items, Response, Swagger, Schema } from '../swagger'
-import { typeMapChanceConfig, DEFAULT_ARRAY_COUNT, FAKE_OPTIONAL_TRIGGER } from './config'
+import {
+  typeMapChanceConfig,
+  DEFAULT_ARRAY_COUNT,
+  FAKE_OPTIONAL_TRIGGER,
+  MAX_NEST_STACK_SIZE
+} from './config'
 import { isString } from '../share'
 import { chanceInstance } from '../sardine'
 
+let refStackMap: Map<string, number>
+
+function stackManage<T>(ref: string, result: T): T | void {
+  if (refStackMap) {
+    if (refStackMap.has(ref)) {
+      const stackSize: number = refStackMap.get(ref) as number
+      let maxSize = chanceInstance._MAX_NEST_STACK_SIZE || MAX_NEST_STACK_SIZE
+      if (stackSize && stackSize >= maxSize) {
+        return result
+      }
+      refStackMap.set(ref, stackSize + 1)
+    }
+  } else {
+    refStackMap = new Map()
+    refStackMap.set(ref, 1)
+  }
+}
 export function fakeByDeinition(
   definition: Definition | Items,
   definitions: Record<string, Definition>
@@ -44,6 +66,8 @@ export function fakeObjectDefinition(
       return
     }
     if (value.$ref) {
+      let res = stackManage(value.$ref, mock[key])
+      if (res) return
       mock[key] = fakeRef(value.$ref, definitions)
       return
     }
@@ -57,6 +81,7 @@ export function fakeObjectDefinition(
 interface StringLength {
   length: number
 }
+
 export function fakeRef(
   ref: string,
   definitions: Record<string, Definition>
@@ -110,9 +135,12 @@ export function fakeArrays(
    * @comment handler $refs
    */
   if (definition.items?.$ref) {
-    const arr = []
+    const arr: unknown[] = []
+    const ref: string = definition.items.$ref
+    let res = stackManage(ref, arr)
+    if (res) return res
     for (let i = 0; i < fakeCount; i++) {
-      arr.push(fakeRef(definition.items?.$ref, definitions))
+      arr.push(fakeRef(ref, definitions))
     }
     return arr
   }

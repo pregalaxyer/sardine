@@ -24,6 +24,10 @@ export default class Sardine {
      * config chance fake count of arrays
      */
     __DEFAULT_ARRAY_COUNT?: number
+    /**
+     * max stack size for nest object
+     */
+    _MAX_NEST_STACK_SIZE?: number
   } = chanceInstance
   public koa: Koa | undefined
   public swagger: SwaggerPathInParameters | undefined
