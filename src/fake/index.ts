@@ -16,6 +16,7 @@ function stackManage<T>(ref: string, result: T): T | void {
       const stackSize: number = refStackMap.get(ref) as number
       let maxSize = chanceInstance._MAX_NEST_STACK_SIZE || MAX_NEST_STACK_SIZE
       if (stackSize && stackSize >= maxSize) {
+        refStackMap.delete(ref)
         return result
       }
       refStackMap.set(ref, stackSize + 1)
