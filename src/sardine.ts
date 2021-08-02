@@ -2,6 +2,7 @@ import Koa, { Middleware } from 'koa'
 import { getSwaggerJsonFromUrl, SwaggerPathInParameters } from './share'
 import { initKoa } from './server'
 import { KOA_PORT } from './server/config'
+export { responseBodyMiddleware } from './server/middleware/response'
 const Chance = require('chance')
 
 const chanceInstance: InstanceType<any> = new Chance()

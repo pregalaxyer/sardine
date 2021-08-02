@@ -12,6 +12,29 @@ interface Stack {
   ref: string
   size: number
 }
+function stackChecker(
+  stack: Stack | undefined,
+  ref: string
+): {
+  stop?: boolean
+  nestStack?: Stack
+} {
+  if (stack && stack.size >= (chanceInstance._MAX_NEST_STACK_SIZE || MAX_NEST_STACK_SIZE)) {
+    stack = undefined
+    return { stop: true }
+  }
+  let nestStack =
+    stack && stack.ref === ref
+      ? stack
+      : {
+          ref,
+          size: 0
+        }
+  if (ref === nestStack.ref) {
+    nestStack.size++
+  }
+  return { nestStack }
+}
 export function fakeByDeinition(
   definition: Definition | Items,
   definitions: Record<string, Definition>,
@@ -57,17 +80,8 @@ export function fakeObjectDefinition(
       return
     }
     if (value.$ref) {
-      if (stack && stack.size >= (chanceInstance._MAX_NEST_STACK_SIZE || MAX_NEST_STACK_SIZE)) {
-        stack = undefined
-        return mock
-      }
-      let nestStack = stack || {
-        ref: value.$ref,
-        size: 0
-      }
-      if (value.$ref === nestStack.ref) {
-        nestStack.size++
-      }
+      const { stop, nestStack } = stackChecker(stack, value.$ref)
+      if (stop) return
       mock[key] = fakeRef(value.$ref, definitions, nestStack)
       return
     }
@@ -139,16 +153,9 @@ export function fakeArrays(
   if (definition.items?.$ref) {
     const arr: unknown[] = []
     const ref: string = definition.items.$ref
-    if (stack && stack.size >= (chanceInstance._MAX_NEST_STACK_SIZE || MAX_NEST_STACK_SIZE)) {
-      stack = undefined
+    const { stop, nestStack } = stackChecker(stack, ref)
+    if (stop) {
       return []
-    }
-    let nestStack = stack || {
-      ref,
-      size: 0
-    }
-    if (ref === nestStack.ref) {
-      nestStack.size++
     }
     for (let i = 0; i < fakeCount; i++) {
       arr.push(fakeRef(ref, definitions, nestStack))

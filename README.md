@@ -43,7 +43,8 @@ interface SardineOptions {
   url: string
   port?: number
   defaultFakeConfigs?: Record<string, any>
-  koaMiddleware?: Middleware
+  requestMiddlewares?: Middleware[]
+  responseMiddleWares?: Middleware[]
 }
 
 

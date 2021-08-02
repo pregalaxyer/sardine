@@ -42,7 +42,9 @@ const definitions: Record<string, Definition> = {
     properties: {
       type: { type: 'string', enum: ['cat', 'dog', 'pig'] },
       // @ts-ignore
-      storeIds: { type: 'array', items: { type: 'integer' } }
+      storeIds: { type: 'array', items: { type: 'integer' } },
+      // @ts-ignore
+      children: { type: 'object', $ref: '#/definitions/Pet' }
     }
   }
 }
@@ -171,6 +173,9 @@ describe('mock data tests', () => {
     expect(isString).toBeCalled()
     expect(obj).toHaveProperty('id')
     expect(obj.pet).toHaveProperty('type')
+    console.log(obj.pet)
+    expect(obj.pet.children.children).toBeDefined()
+    expect(obj.pet.children.children.children).toBeUndefined()
   })
 
   test('fakeResponse fake data from scheme', () => {
