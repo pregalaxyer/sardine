@@ -8,29 +8,16 @@ import {
 import { isString } from '../share'
 import { chanceInstance } from '../sardine'
 
-let refStackMap: Map<string, number>
-
-function stackManage<T>(ref: string, result: T): T | void {
-  if (refStackMap) {
-    if (refStackMap.has(ref)) {
-      const stackSize: number = refStackMap.get(ref) as number
-      let maxSize = chanceInstance._MAX_NEST_STACK_SIZE || MAX_NEST_STACK_SIZE
-      if (stackSize && stackSize >= maxSize) {
-        refStackMap.delete(ref)
-        return result
-      }
-      refStackMap.set(ref, stackSize + 1)
-    }
-  } else {
-    refStackMap = new Map()
-    refStackMap.set(ref, 1)
-  }
+interface Stack {
+  ref: string
+  size: number
 }
 export function fakeByDeinition(
   definition: Definition | Items,
-  definitions: Record<string, Definition>
+  definitions: Record<string, Definition>,
+  stack?: Stack
 ): Record<string, any> {
-  return typeActions[definition.type](definition, definitions)
+  return typeActions[definition.type](definition, definitions, stack)
 }
 /**
  * @description #/definitions/Category -> Category
@@ -43,9 +30,11 @@ export function getRefDefinitionName(ref: string): string {
 
 export function fakeObjectDefinition(
   definition: Definition | Schema,
-  definitions: Record<string, Definition>
+  definitions: Record<string, Definition>,
+  stack?: Stack
 ): Record<string, any> {
   const mock: Record<string, any> = {}
+
   const properties = definition.properties || definition.additionalProperties
   /**
    * no key object, fake key and value
@@ -55,6 +44,7 @@ export function fakeObjectDefinition(
     mock[chanceInstance.string()] = typeActions[properties.type](properties, definitions)
     return mock
   }
+
   Object.entries(properties).forEach(([key, value]) => {
     /**
      * fake optional key, do nothing when key is not required
@@ -67,13 +57,22 @@ export function fakeObjectDefinition(
       return
     }
     if (value.$ref) {
-      let res = stackManage(value.$ref, mock[key])
-      if (res) return
-      mock[key] = fakeRef(value.$ref, definitions)
+      if (stack && stack.size >= (chanceInstance._MAX_NEST_STACK_SIZE || MAX_NEST_STACK_SIZE)) {
+        stack = undefined
+        return mock
+      }
+      let nestStack = stack || {
+        ref: value.$ref,
+        size: 0
+      }
+      if (value.$ref === nestStack.ref) {
+        nestStack.size++
+      }
+      mock[key] = fakeRef(value.$ref, definitions, nestStack)
       return
     }
     // @ts-ignore
-    mock[key] = typeActions[value.type](value, definitions)
+    mock[key] = typeActions[value.type](value, definitions, stack)
     return
   })
   return mock
@@ -85,10 +84,11 @@ interface StringLength {
 
 export function fakeRef(
   ref: string,
-  definitions: Record<string, Definition>
+  definitions: Record<string, Definition>,
+  stack?: Stack
 ): Record<string, any> | unknown[] {
   const definitionName = getRefDefinitionName(ref)
-  return fakeByDeinition(definitions[definitionName], definitions)
+  return fakeByDeinition(definitions[definitionName], definitions, stack && { ...stack })
 }
 
 export function fakeStringLength(minLength?: number, maxLength?: number): StringLength | {} {
@@ -122,7 +122,8 @@ type ItemsType = Exclude<Pick<Items, 'type'>['type'], 'file'>
 
 export function fakeArrays(
   definition: Definition | Items | Schema,
-  definitions: Record<string, Definition>
+  definitions: Record<string, Definition>,
+  stack?: Stack
 ): unknown[] {
   const fakeCount: number = fakeArrayCount(definition.minItems, definition.maxItems)
   const fakeSourceArrays: Array<any> = definition.enum || definition.items?.enum || []
@@ -138,10 +139,19 @@ export function fakeArrays(
   if (definition.items?.$ref) {
     const arr: unknown[] = []
     const ref: string = definition.items.$ref
-    let res = stackManage(ref, arr)
-    if (res) return res
+    if (stack && stack.size >= (chanceInstance._MAX_NEST_STACK_SIZE || MAX_NEST_STACK_SIZE)) {
+      stack = undefined
+      return []
+    }
+    let nestStack = stack || {
+      ref,
+      size: 0
+    }
+    if (ref === nestStack.ref) {
+      nestStack.size++
+    }
     for (let i = 0; i < fakeCount; i++) {
-      arr.push(fakeRef(ref, definitions))
+      arr.push(fakeRef(ref, definitions, nestStack))
     }
     return arr
   }

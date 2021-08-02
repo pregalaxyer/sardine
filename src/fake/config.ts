@@ -32,4 +32,4 @@ export const FAKE_BY_DEFAULT: boolean = true
  */
 export const FAKE_BY_DEFAULT_RATE: number = 1
 
-export const MAX_NEST_STACK_SIZE: number = 5
+export const MAX_NEST_STACK_SIZE: number = 3
