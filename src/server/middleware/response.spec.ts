@@ -1,7 +1,13 @@
-import fakeResponseMiddleWare, { getSwaggerPathResponse, handlerResponse } from './response'
+import fakeResponseMiddleWare, {
+  getSwaggerPathResponse,
+  handlerResponse,
+  responseBodyMiddleware,
+  ResponseBodyMiddlewareOptions
+} from './response'
 import { getSwaggerJsonFromUrl } from '../../share'
 import { Swagger } from '../../swagger'
 import { DEFAULT_RESPONSE_DATA, DEFAULT_RESPONSE } from '../config'
+import { Middleware, Next } from 'koa'
 let swagger: Swagger
 jest.setTimeout(5000)
 beforeAll(async () => {
@@ -45,5 +51,26 @@ describe('response middleware tests', () => {
     okResponses = {}
     const defaultFakeData = handlerResponse(okResponses, swagger)
     expect(defaultFakeData).toStrictEqual(DEFAULT_RESPONSE_DATA)
+  })
+  test('responseBodyMiddleware handler code', async () => {
+    const options: ResponseBodyMiddlewareOptions[] = []
+    let middleware = responseBodyMiddleware(options)
+    const ctx: any = {
+      body: 'ok'
+    }
+    const next: Next = jest.fn().mockImplementation(async () => {})
+    await middleware(ctx, next)
+    expect(next).toBeCalled()
+    expect(ctx.body).toBe('ok')
+    options.push({
+      key: 'code',
+      value: '0'
+    })
+    middleware = responseBodyMiddleware(options)
+    await middleware(ctx, next)
+    expect(ctx.body).toHaveProperty('code', '0')
+    ctx.body = ['ok']
+    await middleware(ctx, next)
+    expect(ctx.body[0]).toHaveProperty('code', '0')
   })
 })

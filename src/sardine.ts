@@ -54,8 +54,8 @@ export default class Sardine {
     this.koa = initKoa(this.swagger, this.requestMiddlewares)
     if (this.responseMiddleWares && this.responseMiddleWares) {
       this.responseMiddleWares.forEach(middleware => {
-        // @ts-ignore
-        this.koa.use(middleware)
+        console.log(middleware)
+        this.koa?.use(middleware)
       })
     }
     const schemes = this.swagger.schemes ? this.swagger.schemes[0] : 'http'

@@ -2,7 +2,7 @@ import { Middleware } from 'koa'
 import { fakeResponse } from '../../fake'
 import { FakeResponseData, DEFAULT_RESPONSE_DATA, DEFAULT_RESPONSE } from '../config'
 import { SwaggerResponses } from '../../swagger'
-import { SwaggerPathInParameters } from '../../share'
+import { SwaggerPathInParameters, isObject } from '../../share'
 
 const fakeResponseMiddleWare: (swagger: SwaggerPathInParameters) => Middleware = swagger => async (
   ctx,
@@ -61,6 +61,38 @@ export function handlerResponse(
       return DEFAULT_RESPONSE_DATA
     }
   }
+}
+
+export interface ResponseBodyMiddlewareOptions {
+  key: string
+  value: any
+}
+function responseBodyHandler(body: Record<string, any>, options: ResponseBodyMiddlewareOptions[]) {
+  if (!isObject(body)) body = {}
+  options.forEach(option => {
+    const { key, value } = option
+    // @ts-ignore
+    body[key] = value
+  })
+  return body
+}
+/**
+ * fake a responseBody fill some keys in fakeResponse with specify values
+ * { [key]: value}
+ */
+export const responseBodyMiddleware: (
+  options: ResponseBodyMiddlewareOptions[]
+) => Middleware = options => async (ctx, next) => {
+  if (!options || !options.length) {
+    await next()
+    return
+  }
+  if (Array.isArray(ctx.body)) {
+    ctx.body = ctx.body.map(bodyItem => responseBodyHandler(bodyItem, options))
+  } else {
+    ctx.body = responseBodyHandler(ctx.body, options)
+  }
+  await next()
 }
 
 export default fakeResponseMiddleWare
