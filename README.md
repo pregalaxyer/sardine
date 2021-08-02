@@ -28,14 +28,20 @@ yarn add sardine -D
 ### Usage
 
 ```js
-const Sardine = require('sardine').default
+// mock.js
+const {
+  default: Sardine,
+  chanceInstance,
+  responseBodyMiddleware // a middleware Examples
+} = require('sardine')
 
 new Sardine({
   url: 'https://petstore.swagger.io/v2/swagger.json',
-  port: 9000
+  port: 9000,
 })
 
 ```
+Run `node mock.js` to start your first sardine mock server
 
 `Options`:
 ``` typescript
@@ -53,7 +59,6 @@ interface SardineOptions {
 - `port` mock sever port
 - `defaultFakeConfigs` TODO
 - `koaMiddleware` middleware use in koa mock server
-
 
 
 
@@ -76,9 +81,6 @@ interface SardineOptions {
 - `default` value use for fake value
 
 
-### TODO
-
-- mock request validator
 
 
 
