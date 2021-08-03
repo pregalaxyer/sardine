@@ -1,7 +1,7 @@
 {
-  "name": "sardine",
+  "name": "@dylan92/sardine",
   "version": "0.0.0",
-  "description": "a mock serve tool from swagger",
+  "description": "one step mock sever via swagger schema",
   "keywords": [],
   "main": "dist/sardine.umd.js",
   "module": "dist/sardine.es.js",
@@ -19,6 +19,7 @@
     "lint": "tslint  --project tsconfig.json -t codeFrame 'src/**/*.ts' 'src/*.ts' 'test/**/*.ts'",
     "prebuild": "rimraf dist",
     "build": " rollup -c rollup.config.ts ",
+    "publish": "npm run build && npm publish --access=public",
     "start": "rollup -c rollup.config.ts -w",
     "test": "jest",
     "test:cov": "jest --coverage --no-cache --detectOpenHandles --forceExit",

@@ -48,26 +48,38 @@ Run `node mock.js` to start your first sardine mock server
 interface SardineOptions {
   url: string
   port?: number
-  defaultFakeConfigs?: Record<string, any>
   requestMiddlewares?: Middleware[]
   responseMiddleWares?: Middleware[]
 }
-
+/* make it is possible to config your chanceInstance
+  */
+public chanceInstance: {
+  /**
+   * config chance fake count of arrays
+   */
+  __DEFAULT_ARRAY_COUNT?: number
+  /**
+   * max stack size for nest object
+   */
+  _MAX_NEST_STACK_SIZE?: number
+} = chanceInstance
 
 ```
 - `url` swagger json url
 - `port` mock sever port
-- `defaultFakeConfigs` TODO
-- `koaMiddleware` middleware use in koa mock server
+- `requestMiddlewares` & `responseMiddleWares` middleware use in koa mock server, [more about koa](https://koajs.com/)
 
 
 
 ### Swagger Schemes
 
- 📖 : [Swagger Schemes](https://swagger.io/specification/v2/#swaggerSchemes)
+ 📖 : [Swagger Schemes V2](https://swagger.io/specification/v2/#swaggerSchemes)
 
  💡: <b>Newton's 🍎</b>
 > However, the format property is an open string-valued property, and can have any value to support documentation needs. Formats such as "email", "uuid", etc., can be used even though they are not defined by this specification
+
+
+You can create a lot fake data via different format type(id, card, png, city)
 
 🚥 : <b>Rules</b>
 - `number` types use `minimum` & `maximum`
@@ -81,18 +93,7 @@ interface SardineOptions {
 - `default` value use for fake value
 
 
+### TODO
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+- swagger v3 support
+- request validtor middleware（options 😄）

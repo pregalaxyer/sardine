@@ -11,7 +11,6 @@ export { chanceInstance }
 interface SardineOptions {
   url: string
   port?: number
-  defaultFakeConfigs?: Record<string, any>
   requestMiddlewares?: Middleware[]
   responseMiddleWares?: Middleware[]
 }
@@ -34,14 +33,11 @@ export default class Sardine {
   public swagger: SwaggerPathInParameters | undefined
   public url: SardineOptions['url']
   public port?: number
-  public defaultFakeConfigs: SardineOptions['defaultFakeConfigs']
   public requestMiddlewares?: Middleware[]
   public responseMiddleWares?: Middleware[]
   constructor(options: SardineOptions) {
     this.url = options.url
     this.port = options.port || KOA_PORT
-    //TODO default fake config
-    this.defaultFakeConfigs = options.defaultFakeConfigs || {}
     this.requestMiddlewares = options.requestMiddlewares
     this.responseMiddleWares = options.responseMiddleWares
     this.init()
