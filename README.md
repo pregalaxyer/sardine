@@ -33,11 +33,19 @@ const {
   default: Sardine,
   chanceInstance,
   responseBodyMiddleware // a middleware Examples
-} = require('sardine')
+} = require('@pregalaxyer/sardine')
 
 new Sardine({
   url: 'https://petstore.swagger.io/v2/swagger.json',
   port: 9000,
+  responseMiddleWares: [
+    // sardine will fake the code & msg field in body with provide value
+    // { code: '0', 'msg': 'success', ...other fake data} 
+    responseBodyMiddleware([
+      { key: 'code', value: '0' },
+      { key: 'msg', value: 'success' }
+    ])
+  ]
 })
 
 ```

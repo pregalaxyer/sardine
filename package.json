@@ -1,6 +1,6 @@
 {
-  "name": "@dylan92/sardine",
-  "version": "0.0.0",
+  "name": "@pregalaxyer/sardine",
+  "version": "0.0.1",
   "description": "one step mock sever via swagger schema",
   "keywords": [],
   "main": "dist/sardine.umd.js",
@@ -10,7 +10,7 @@
     "dist"
   ],
   "author": "dylan <dylan_zeng92@qq.com>",
-  "repository": "https://github.com/diveDylan/sardine",
+  "repository": "https://github.com/pregalaxyer/sardine",
   "license": "MIT",
   "engines": {
     "node": ">=6.0.0"
