@@ -23,7 +23,7 @@
     "start": "rollup -c rollup.config.ts -w",
     "test": "jest",
     "test:cov": "jest --coverage --no-cache --detectOpenHandles --forceExit",
-    "codecov": "codecov --token=c2eba3bd-e6e1-4a08-b226-fe0829dcd151",
+    "codecov": "codecov --token=e9b1c0da-045e-4c78-9618-5e2f26d3982b",
     "test:prod": "npm run lint && npm run test -- --no-cache",
     "deploy-docs": "ts-node tools/gh-pages-publish",
     "report-coverage": "cat ./coverage/lcov.info | coveralls",

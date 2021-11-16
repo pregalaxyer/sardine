@@ -7,8 +7,8 @@
 </div>
 
 <p style="text-align: center; margin-top: 10px">
-  <img src="https://img.shields.io/travis/com/diveDylan/sardine" />
-  <img src="https://img.shields.io/codecov/c/github/diveDylan/sardine" />
+  <img src="https://img.shields.io/travis/com/pregalaxyer/sardine" />
+  <img src="https://img.shields.io/codecov/c/github/pregalaxyer/sardine" />
 </p>
 
 
@@ -19,9 +19,9 @@
 ### Install
 
 ``` bash
-npm install sardine -D
+npm install @pregalaxyer/sardine -D
 //or
-yarn add sardine -D
+yarn add @pregalaxyer/sardine -D
 
 ```
 
