@@ -1,6 +1,6 @@
 {
   "name": "@pregalaxyer/sardine",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "one step mock sever via swagger schema",
   "keywords": [],
   "main": "dist/sardine.umd.js",
